@@ -4,6 +4,7 @@ import info.pedrodonte.properties.ProcesaPropiedades;
 import info.pedrodonte.properties.PropiedadesManager;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -67,7 +68,7 @@ public class ClaseVO {
 	public void grabarArchivodeClaseJava(String paqueteCodigoGenerado, String path){
 		setPaqueteContenedor(paqueteCodigoGenerado);
 		paqueteCodigoGenerado = paqueteCodigoGenerado.replace(".", "\\");
-		String filename = path+paqueteCodigoGenerado+"/"+nombreVO+".java";
+		String filename = path+File.separatorChar+paqueteCodigoGenerado+File.separatorChar+nombreVO+".java";
 		String content = generarContenidoClase();
 		
         try {
@@ -241,7 +242,7 @@ public class ClaseVO {
 		List<String> preFijos = (List<String>) ProcesaPropiedades.getInstancia().obtenerConfiguracion().get(PropiedadesManager.PREFIJO_ENTIDA);
 		for (String prefijo : preFijos) {
 			if(atributoVO.getTipoAtributoEnti().startsWith(prefijo)){
-				System.out.println(prefijo+" == "+atributoVO.getTipoAtributoEnti());
+				System.out.println(prefijo+" == "+atributoVO.getTipoAtributoEnti()+" = "+atributoVO.getTipoAtributoEnti().startsWith(prefijo));
 				return true;
 			}
 		}
@@ -253,11 +254,11 @@ public class ClaseVO {
 		sb.append(NL+TB+"/** Transforma un objeto tipo "+ nombreEntity +" en uno nuevo de tipo "+ nombreVO +" */"+NL);
 		sb.append(TB+"public "+nombreVO+" toVO("+nombreEntity+" "+ getNombreCamelMinuscula(nombreEntity)+"){"+NL);
 		sb.append(TB+TB+""+nombreVO+" "+getNombreCamelMinuscula(nombreVO)+" = new "+nombreVO+"();"+NL);
-		sb.append(TB+TB+"try{ "+NL);
+		//sb.append(TB+TB+"try{ "+NL);
 		for (AtributoVO atributoVO : atributos) {
 			sb.append(TB+TB+"\t"+getSetterToVODeficionion(atributoVO)+NL+"");//
 		}
-		sb.append(TB+TB+"}catch(java.lang.NullPointerException e){/*seteando valores nulos, es normal.*/} "+NL);
+		//sb.append(TB+TB+"}catch(java.lang.NullPointerException e){/*seteando valores nulos, es normal.*/} "+NL);
 		sb.append(TB+TB+"return "+getNombreCamelMinuscula(nombreVO)+";"+NL);
 		sb.append(TB+"}"+NL);
 		//System.out.println(sb);
